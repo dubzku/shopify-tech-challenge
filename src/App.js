@@ -12,8 +12,7 @@ class App extends Component {
             loading: false,
             message: '',
             nominatedMovies: [],
-            isButtonDisabled: false,
-            isInputDisabled: false
+            isButtonDisabled: []
         }
     }
 
@@ -138,11 +137,6 @@ class App extends Component {
 
     }
 
-    // if movieName and Title match, disable the nominate button 
-    // ternary operators movieName === Title
-    //                      ? button disabled
-    //                      : button enabled
-
     onNominate = (indexOfNomination) => {
 
         const dbRef = firebase.database().ref();
@@ -198,7 +192,9 @@ class App extends Component {
                                 return (
                                     <div key={result.imdbID}>
                                         <p>{result.Title} ({result.Year})</p>
-                                        <button onClick={() => this.onNominate(index)} disabled={this.state.isButtonDisabled}>Nominate</button>
+                                        <button id={result.imdbID} 
+                                        onClick={() => this.setState({isButtonDisabled: [...this.state.isButtonDisabled, result.imdbID]}, () => {this.onNominate(index) })} 
+                                        disabled={this.state.isButtonDisabled.indexOf(result.imdbID)!==-1}>Nominate</button>
                                     </div>
                                 )
                             })
