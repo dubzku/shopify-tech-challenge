@@ -12,7 +12,8 @@ class App extends Component {
             loading: false,
             message: '',
             nominatedMovies: [],
-            isButtonDisabled: []
+            isButtonDisabled: [],
+            isInputDisabled: false
         }
     }
 
@@ -22,6 +23,7 @@ class App extends Component {
 
         dbRef.on('value', (snapshot) => {
             const data = snapshot.val();
+            console.log('data', data)
 
             const newNominations = [];
 
@@ -29,7 +31,8 @@ class App extends Component {
                 newNominations.push({
                     key: key,
                     movieName: data[key].movieName,
-                    movieYear: data[key].movieYear
+                    movieYear: data[key].movieYear,
+                    imdbID: data[key].imdbID
                 })
             }
 
@@ -123,7 +126,7 @@ class App extends Component {
                     {
                         nominatedMovies.map((nominatedMovie) => {
                             return (
-                                <div key={nominatedMovie.key}>
+                                <div key={nominatedMovie.imdbID}>
                                     <p>{nominatedMovie.movieName} ({nominatedMovie.movieYear})</p>
                                     <button onClick={() => this.removeNomination(nominatedMovie.key)}>Remove</button>
                                 </div>
@@ -137,21 +140,55 @@ class App extends Component {
 
     }
 
-    onNominate = (indexOfNomination) => {
+    onNominate = (resultFromApi, indexOfNomination) => {
 
+        if (this.state.nominatedMovies.length < 5) {
+            this.setState({
+            isButtonDisabled: [...this.state.isButtonDisabled, resultFromApi.imdbID]
+        }, () => this.checkNominationLimit(indexOfNomination) )
+        } else {
+            alert("You've reached your nomination limit! You can remove a nomination to make room for another one!")
+        }
+    }
+
+    checkNominationLimit = (indexOfNomination) => {
         const dbRef = firebase.database().ref();
 
-        dbRef.push({
+        if (this.state.nominatedMovies.length < 5) {
+            dbRef.push({
             movieName: this.state.results[indexOfNomination].Title,
-            movieYear: this.state.results[indexOfNomination].Year
+            movieYear: this.state.results[indexOfNomination].Year,
+            imdbID: this.state.results[indexOfNomination].imdbID
         });
-
+        } else {
+            alert('You have too many movies!');
+        }
     }
 
 
     removeNomination = (nomination) => {
         const dbRef = firebase.database().ref();
         dbRef.child(nomination).remove();
+
+        const copyOfNominations = [...this.state.nominatedMovies];
+
+        const filteredResult = copyOfNominations.filter((item) => {
+            return item.key === nomination
+        })
+        const filteredResultId = filteredResult[0].imdbID
+
+        const copyIsButtonDisabled = [...this.state.isButtonDisabled];
+
+        const index = copyIsButtonDisabled.indexOf(filteredResultId);
+        if (index > -1 ) {
+            copyIsButtonDisabled.splice(index, 1)
+        }
+
+        this.setState({
+            isButtonDisabled: copyIsButtonDisabled
+        })
+        
+        
 
     }
 
@@ -165,7 +202,7 @@ class App extends Component {
                 <h1>Shopify Presents: The Shoppies Movie Awards</h1>
                 {
                         this.state.nominatedMovies.length >= 5
-                        ? <p>You've got 5 nominations! Maximum reached!</p>
+                        ? <p>You've reached your limit of 5 nominations!</p>
                         : ''
                 }
 
@@ -193,7 +230,7 @@ class App extends Component {
                                     <div key={result.imdbID}>
                                         <p>{result.Title} ({result.Year})</p>
                                         <button id={result.imdbID} 
-                                        onClick={() => this.setState({isButtonDisabled: [...this.state.isButtonDisabled, result.imdbID]}, () => {this.onNominate(index) })} 
+                                        onClick={() => this.onNominate(result, index)} 
                                         disabled={this.state.isButtonDisabled.indexOf(result.imdbID)!==-1}>Nominate</button>
                                     </div>
                                 )
