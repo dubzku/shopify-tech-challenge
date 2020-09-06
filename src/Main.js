@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import firebase from './firebase';
 import Nominations from './Nominations';
+import Loader from './assets/loader.gif'
 
 class Main extends Component {
     constructor (props) {
@@ -14,13 +15,14 @@ class Main extends Component {
             nominatedMoviesFromChild: [],
             isButtonDisabled: [],
         }
+        this.cancel = '';
     }
 
-    // this is to do with when the user types into the Search Movie field
+    // Event Handler for when the user types into the search field
     handleOnInputChange = (event) => {
         const query = event.target.value;
 
-        // if condition so that when the user deletes their input, the results will also disappear, rather than staying on the screen
+        // If there is nothing in the user input field (i.e. if user deletes their input) clear the previous movie results from the DOM
         if ( ! query ) {
             this.setState({
                 query,
@@ -28,8 +30,9 @@ class Main extends Component {
                 message: ''
             })
         } else {
+            // Otherwise, set state with their search query, and make the API call with that query
             this.setState({
-                query: query,
+                query,
                 loading: true,
                 message: ''
             }, () => {
@@ -38,18 +41,23 @@ class Main extends Component {
         }
     }
 
-    // API Call to get the movie results
+    // API Call to OMDb to get the movie results
     fetchSearchResults = (query) => {
         const searchUrl = `http://www.omdbapi.com/?apikey=2e09b2c3&type=movie&s=${query}`
 
+        // Because this is a live search, need to cancel previous API requests before making a new one (otherwise requests will be firing each time user types a letter)
+        // Before making request, first check if this.cancel token is already available; if so, then cancel that previous request before making new one
         if ( this.cancel ) {
             this.cancel.cancel();
         }
+
+        // if it is not available, create a new token
         this.cancel = axios.CancelToken.source();
+
         axios.get(searchUrl, {
             cancelToken: this.cancel.token
         })
-        .then(res => {
+        .then((res) => {
             const resultNotFoundMsg = ! res.data.Search.length
                                     ? 'There are no results for this title. Please try another movie title.' 
                                     : '';
@@ -70,38 +78,39 @@ class Main extends Component {
         })
     }
 
-    onNominate = (resultFromApi, indexOfNomination) => {
+    // Event Handler for when nominate button is clicked 
+    onNominate = (resultFromApi, indexOfResult) => {
 
         if (this.state.nominatedMoviesFromChild.length < 5) {
             this.setState({
-            isButtonDisabled: [...this.state.isButtonDisabled, resultFromApi.imdbID]
-        }, () => this.checkNominationLimit(indexOfNomination) )
+                // add the clicked nominate button ID to a copy of the isButtonDisabled array in state, and setState for isButtonDisabled
+                isButtonDisabled: [...this.state.isButtonDisabled, resultFromApi.imdbID]
+            }, () => this.checkNominationLimit(indexOfResult) )
         } else {
             alert("You've reached your nomination limit! You can remove a nomination to make room for another one!")
         }
     }
 
-    checkNominationLimit = (indexOfNomination) => {
+    // To check whether or not to push nominated movie data to Firebase 
+    checkNominationLimit = (indexOfResult) => {
         const dbRef = firebase.database().ref();
 
         if (this.state.nominatedMoviesFromChild.length < 5) {
             dbRef.push({
-            movieName: this.state.results[indexOfNomination].Title,
-            movieYear: this.state.results[indexOfNomination].Year,
-            imdbID: this.state.results[indexOfNomination].imdbID
-        });
-        } else {
-            alert('You have too many movies!');
-        }
+                movieName: this.state.results[indexOfResult].Title,
+                movieYear: this.state.results[indexOfResult].Year,
+                imdbID: this.state.results[indexOfResult].imdbID
+            });
+        } 
     }
 
-    callbackToSendChild = (dataFromChild) => {
+    callbackToSendNomination = (dataFromChild) => {
         this.setState({
             isButtonDisabled: dataFromChild
         })
     }
 
-    callbackToSendChildTwo = (dataFromChild) => {
+    callbackToSendNominationTwo = (dataFromChild) => {
         this.setState({
             nominatedMoviesFromChild: dataFromChild
         })
@@ -113,11 +122,8 @@ class Main extends Component {
         return (
             <div className="App">
 
-                {
-                        this.state.nominatedMoviesFromChild.length >= 5
-                        ? <p>You've reached your limit of 5 nominations!</p>
-                        : ''
-                }
+                {/* Banner to let user know they've reached nomination limit */}
+                { this.state.nominatedMoviesFromChild.length >= 5 ? <p>You've reached your limit of 5 nominations!</p> : '' }
 
                 {/* Search Input */}
                 <label htmlFor="searchInput">
@@ -125,33 +131,41 @@ class Main extends Component {
                         type="text"
                         id="searchInput"
                         name="query"
-                        value={query}
+                        value={ query }
                         placeholder="Enter movie name"
                         onChange={ this.handleOnInputChange }
                     />
                 </label>
-                
 
+                {/* {message && <p className="message">{ message }</p>} */}
+                
                 <div className="flexContainer">
                     <div className="resultsContainer">
                         <h2>Movie Results for {this.state.query}</h2>
+
+                        <img src={Loader} className={`search-loading ${loading ? 'show' : 'hide'}`} alt="loader"/>
+
                         {
-                            this.state.results.map((result, index) => {
+                            this.state.results.map( (result, index) => {
                                 return (
-                                    <div key={result.imdbID}>
-                                        <p>{result.Title} ({result.Year})</p>
-                                        <button id={result.imdbID} 
-                                        onClick={() => this.onNominate(result, index)} 
-                                        disabled={this.state.isButtonDisabled.indexOf(result.imdbID)!==-1}>Nominate</button>
+                                    <div key={ result.imdbID }>
+                                        <p>{ result.Title } ({ result.Year })</p>
+                                        <button 
+                                            id={ result.imdbID } 
+                                            onClick={ () => this.onNominate(result, index) } 
+                                            // check whether current button exists in the isButtonDisabled array
+                                            disabled={ this.state.isButtonDisabled.indexOf(result.imdbID) !== -1 }>
+                                            Nominate
+                                        </button>
                                     </div>
                                 )
                             })
                         }
                     </div>
 
-                    <Nominations passIsButtonDisabledInfo={isButtonDisabled} 
-                                callbackFromParent={this.callbackToSendChild}
-                                callbackFromParentTwo={this.callbackToSendChildTwo} />
+                    <Nominations passIsButtonDisabledInfo={ isButtonDisabled } 
+                                callbackFromMain={ this.callbackToSendNomination }
+                                callbackFromMainTwo={ this.callbackToSendNominationTwo } />
                 </div>
             </div>
         );
