@@ -12,6 +12,7 @@ class Nominations extends Component {
     componentDidMount() {
         const dbRef = firebase.database().ref();
 
+        // grabbing data from Firebase 
         dbRef.on('value', (snapshot) => {
             const data = snapshot.val();
 
@@ -29,7 +30,8 @@ class Nominations extends Component {
             this.setState({
                 nominatedMovies: newNominations
             }, () => {
-                this.props.callbackFromParentTwo(this.state.nominatedMovies);
+                // send nominatedMovies data up to parent (Main.js)
+                this.props.callbackFromMainTwo(this.state.nominatedMovies);
             })
         })
     }
@@ -42,41 +44,39 @@ class Nominations extends Component {
 
         const filteredResult = copyOfNominations.filter((item) => {
             return item.key === nomination
-        })
-        const filteredResultId = filteredResult[0].imdbID
+        });
 
-        // need props from parent (Main)
-        const copyIsButtonDisabled = [...this.props.passIsButtonDisabledInfo]
+        const filteredResultId = filteredResult[0].imdbID;
+
+        // Get isButtonDisabled info from parent (Main.js)
+        const copyIsButtonDisabled = [...this.props.passIsButtonDisabledInfo];
 
         const index = copyIsButtonDisabled.indexOf(filteredResultId);
+
+        // Check if the id of the disabled button is in the isButtonDisabled array; if yes, remove it from the array so that the button becomes re-enabled 
         if (index > -1 ) {
             copyIsButtonDisabled.splice(index, 1)
         }
 
-        // need to pass this info back up to Main.js from Nominations.js
-        this.props.callbackFromParent(copyIsButtonDisabled);
+        // Pass this updated info back up to Main.js from Nominations.js
+        this.props.callbackFromMain(copyIsButtonDisabled);
     }
 
     render () {
         const { nominatedMovies } = this.state;
         return (
             <div className="nominationsContainer">
-                {/* { this.renderNominations()} */}
-                
                     <h2>Movie Nominations</h2>
                     {
                         nominatedMovies.map((nominatedMovie) => {
                             return (
                                 <div key={nominatedMovie.imdbID}>
                                     <p>{nominatedMovie.movieName} ({nominatedMovie.movieYear})</p>
-                                    <button onClick={() => this.removeNomination(nominatedMovie.key)}>Remove</button>
+                                    <button onClick={ () => this.removeNomination(nominatedMovie.key) }>Remove</button>
                                 </div>
                             )
                         }) 
                     }
-
-                
-                
             </div>
         )
     }
