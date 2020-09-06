@@ -70,9 +70,9 @@ class Nominations extends Component {
                     {
                         nominatedMovies.map((nominatedMovie) => {
                             return (
-                                <div key={nominatedMovie.imdbID}>
+                                <div key={nominatedMovie.imdbID} className="nominationChoice">
                                     <p>{nominatedMovie.movieName} ({nominatedMovie.movieYear})</p>
-                                    <button onClick={ () => this.removeNomination(nominatedMovie.key) }>Remove</button>
+                                    <button className="removeButton" onClick={ () => this.removeNomination(nominatedMovie.key) }>Remove</button>
                                 </div>
                             )
                         }) 

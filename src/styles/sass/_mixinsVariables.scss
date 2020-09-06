@@ -1,0 +1,24 @@
+$bodyFont: 'Oswald', sans-serif;
+$headingFont: 'Lobster', cursive;
+$bgColor: #323031;
+$headingFontColor: #FFAD0A;
+$secondaryHeadingFontColor: #DB3A34;
+
+@mixin fontStyle($family, $color, $size, $weight: 400, $lineHeight: auto) {
+    font-family: $family;
+    color: $color;
+    font-size: $size;
+    font-weight: $weight;
+    line-height: $lineHeight;
+}
+
+@mixin buttonStyle () {
+    @include fontStyle($bodyFont, $secondaryHeadingFontColor, 0.9rem);
+    background-color: white;
+    padding: 8px 13px;
+    text-transform: uppercase;
+    border-radius: 0.8rem;
+    border: 1px solid $bgColor;
+    cursor: pointer;
+    margin-top: 10px;
+}

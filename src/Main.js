@@ -135,6 +135,7 @@ class Main extends Component {
                         placeholder="Enter movie name"
                         onChange={ this.handleOnInputChange }
                     />
+                    <i className="fas fa-search"/>
                 </label>
 
                 {message && <p className="message">{ message }</p>}
@@ -148,9 +149,10 @@ class Main extends Component {
                         {
                             results.map( (result, index) => {
                                 return (
-                                    <div key={ result.imdbID }>
+                                    <div key={ result.imdbID } className="resultOption">
                                         <p>{ result.Title } ({ result.Year })</p>
                                         <button 
+                                            className="nominateButton"
                                             id={ result.imdbID } 
                                             onClick={ () => this.onNominate(result, index) } 
                                             // check whether current button exists in the isButtonDisabled array

@@ -1,0 +1,64 @@
+.flexContainer {
+    display: flex;
+}
+
+.resultsContainer,
+.nominationsContainer {
+    border: 1px solid black;
+    width: 50%;
+    background: white;
+}
+
+.resultsContainer {
+position: relative;
+}
+
+/* Loader */
+.search-loading {
+position: absolute;
+left: 0;
+right: 0;
+margin: auto;
+}
+
+/* Show and Hide */
+.show {
+display: inline-block;
+}
+
+.hide {
+display: none;
+}
+
+// Form
+input[type="text"] {
+    @include fontStyle($bodyFont, $bgColor, 1rem);
+    padding: 10px;
+}
+
+// Nominations
+
+.resultsContainer h2,
+.nominationsContainer h2,
+.nominationChoice,
+.resultOption {
+    text-align: center;
+    filter: drop-shadow(0px 0px 5px #666);
+    background: white;
+    padding: 15px 0;
+    // p {
+    //     // display: inline-block;
+    //     padding: 20px;
+    // }
+}
+
+.removeButton,
+.nominateButton {
+    @include buttonStyle();
+}
+
+.removeButton:disabled,
+.nominateButton:disabled {
+    background: lighten($bgColor, 50);
+    color: $bgColor;
+}
