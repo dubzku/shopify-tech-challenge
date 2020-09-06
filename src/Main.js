@@ -72,7 +72,7 @@ class Main extends Component {
             if (axios.isCancel(error) || error ) {
                 this.setState({
                     loading: false,
-                    message: 'Sorry, something went wrong! Please try again.'
+                    message: "Hmm, we don't have that exact title. Here are some similar titles."
                 })
             }
         })
@@ -117,7 +117,7 @@ class Main extends Component {
     }
 
     render() {
-        const { query, loading, message, isButtonDisabled } = this.state;
+        const { query, loading, message, isButtonDisabled, results } = this.state;
 
         return (
             <div className="App">
@@ -137,7 +137,7 @@ class Main extends Component {
                     />
                 </label>
 
-                {/* {message && <p className="message">{ message }</p>} */}
+                {message && <p className="message">{ message }</p>}
                 
                 <div className="flexContainer">
                     <div className="resultsContainer">
@@ -146,7 +146,7 @@ class Main extends Component {
                         <img src={Loader} className={`search-loading ${loading ? 'show' : 'hide'}`} alt="loader"/>
 
                         {
-                            this.state.results.map( (result, index) => {
+                            results.map( (result, index) => {
                                 return (
                                     <div key={ result.imdbID }>
                                         <p>{ result.Title } ({ result.Year })</p>
@@ -154,7 +154,7 @@ class Main extends Component {
                                             id={ result.imdbID } 
                                             onClick={ () => this.onNominate(result, index) } 
                                             // check whether current button exists in the isButtonDisabled array
-                                            disabled={ this.state.isButtonDisabled.indexOf(result.imdbID) !== -1 }>
+                                            disabled={ isButtonDisabled.indexOf(result.imdbID) !== -1 }>
                                             Nominate
                                         </button>
                                     </div>
