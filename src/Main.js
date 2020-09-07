@@ -5,6 +5,7 @@ import Nominations from './Nominations';
 import Loader from './assets/loader.gif'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import swal from 'sweetalert';
 
 class Main extends Component {
     constructor (props) {
@@ -89,7 +90,7 @@ class Main extends Component {
                 isButtonDisabled: [...this.state.isButtonDisabled, resultFromApi.imdbID]
             }, () => this.checkNominationLimit(indexOfResult) )
         } else {
-            alert("You've reached your nomination limit! You can remove a nomination to make room for another one!")
+            swal("You've reached your nomination limit!", "You can remove a nomination to make room for another one!", "warning")
         }
     }
 
@@ -122,12 +123,15 @@ class Main extends Component {
         const { query, loading, message, isButtonDisabled, results } = this.state;
 
         return (
-            <div className="App">
+            <main className="App">
 
                 <div className="instructions">
-                    <p>It's that time of year again...cast your picks for the 2020 Shoppies Movie Awards! You can nominate up to 5 movies. Happy nominating!</p>
-
-                    { this.state.nominatedMoviesFromChild.length >= 5 ? <p className="limitReached">You've reached your limit of 5 nominations!</p> : '' }
+                    <p>It's that time of year again...cast your votes for the 2020 Shoppies Movie Awards! You can nominate up to 5 movies. Happy nominating!</p>
+                </div>
+                <div className="limitReached">
+                    { this.state.nominatedMoviesFromChild.length >= 5 
+                    ? <p>You've reached your nomination limit!</p> 
+                    : '' }
                 </div>
                 
                 {/* Search Input */}
@@ -138,18 +142,19 @@ class Main extends Component {
                         name="query"
                         value={ query }
                         placeholder="Enter movie name"
+                        maxLength="37"
                         onChange={ this.handleOnInputChange }
                     />
                     <span className="srOnly">Search icon from Font Awesome</span><FontAwesomeIcon icon={faSearch} className="magnifyingGlass" />
                 </label>
 
-                <div className="message">
+                <div className="errorMessage">
                     {message && <p>{ message }</p>}
                 </div>
                 
                 
                 <div className="flexContainer">
-                    <div className="resultsContainer">
+                    <div className="resultsContainer" data-aos="fade-right" data-aos-duration="700">
                         <h2>Results {query ? `for "${query}"` :''}</h2>
 
                         <img src={Loader} className={`search-loading ${loading ? 'show' : 'hide'}`} alt="loader"/>
@@ -177,7 +182,7 @@ class Main extends Component {
                                 callbackFromMain={ this.callbackToSendNomination }
                                 callbackFromMainTwo={ this.callbackToSendNominationTwo } />
                 </div>
-            </div>
+            </main>
         );
     }
 }

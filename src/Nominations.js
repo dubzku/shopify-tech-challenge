@@ -65,7 +65,7 @@ class Nominations extends Component {
     render () {
         const { nominatedMovies } = this.state;
         return (
-            <div className="nominationsContainer">
+            <div className="nominationsContainer" data-aos="fade-right" data-aos-duration="700">
                     <h2>Movie Nominations</h2>
                     {
                         nominatedMovies.map((nominatedMovie) => {

@@ -33,3 +33,13 @@ body {
     color: $offWhiteColor;
     transition: all 0.4s;
 }
+
+.swal-button {
+    padding: 8px 13px;
+    border-radius: 0.8rem;
+    background-color: $offWhiteColor;
+    color: $secondaryHeadingFontColor;
+    font-size: 0.8rem;
+    font-family: $bodyFont;
+    border: 1px solid $bgColor;
+}

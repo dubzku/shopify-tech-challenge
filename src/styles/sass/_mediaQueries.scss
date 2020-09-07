@@ -1,0 +1,16 @@
+@media (max-width: 768px) {
+    .flexContainer {
+        flex-direction: column;
+    }
+    
+    .resultsContainer,
+    .nominationsContainer {
+        width: 100%;
+        margin: 0 0 20px 0;
+        h2 {
+            font-size: 1.2rem;
+        }
+    }
+
+
+}
