@@ -6,7 +6,6 @@
 
 .instructions {
     @include fontStyle($bodyFont, $offWhiteColor, 1.1rem);
-    // margin-bottom: 20px;
 }
 
 .limitReached,
@@ -69,7 +68,7 @@ display: none;
 }
 
 // Form
-label {
+.searchBar {
     position: relative;
 }
 
@@ -80,11 +79,15 @@ input[type="text"] {
     margin: 10px 0 10px 0;
 }
 
+input[type="text"]:focus{
+    background-color: lighten($headingFontColor, 25);
+}
+
 .magnifyingGlass {
     position: absolute;
     left: 18px;
-    top: 5px;
-    color: lighten($bgColor, 40);
+    top: 28px;
+    color: lighten($bgColor, 25);
     font-size: 1.2rem;
 
 }

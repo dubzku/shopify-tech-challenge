@@ -90,7 +90,7 @@ class Main extends Component {
                 isButtonDisabled: [...this.state.isButtonDisabled, resultFromApi.imdbID]
             }, () => this.checkNominationLimit(indexOfResult) )
         } else {
-            swal("You've reached your nomination limit!", "You can remove a nomination to make room for another one!", "warning")
+            swal("You've reached your nomination limit", "You can remove a nomination to make room for another one!", "warning", {button: "Got it"})
         }
     }
 
@@ -135,7 +135,8 @@ class Main extends Component {
                 </div>
                 
                 {/* Search Input */}
-                <label htmlFor="searchInput">
+                <div className="searchBar">
+                    <label htmlFor="searchInput" className="srOnly">Enter movie name</label>   
                     <input 
                         type="text"
                         id="searchInput"
@@ -146,7 +147,9 @@ class Main extends Component {
                         onChange={ this.handleOnInputChange }
                     />
                     <span className="srOnly">Search icon from Font Awesome</span><FontAwesomeIcon icon={faSearch} className="magnifyingGlass" />
-                </label>
+                </div>
+                
+                
 
                 <div className="errorMessage">
                     {message && <p>{ message }</p>}

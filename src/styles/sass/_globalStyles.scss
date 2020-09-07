@@ -19,10 +19,11 @@ body {
     @include buttonStyle();
 }
 
-.removeButton:disabled,
-.nominateButton:disabled {
+.nominateButton:disabled,
+.nominateButton:disabled:hover {
     background: lighten($bgColor, 50);
     color: $bgColor;
+    cursor: default;
 }
 
 .removeButton:hover,
@@ -34,12 +35,16 @@ body {
     transition: all 0.4s;
 }
 
+.swal-text {
+    font-family: $modalFont;
+    color: $bgColor;
+}
+
 .swal-button {
+    @include fontStyle ($bodyFont, $secondaryHeadingFontColor, 0.9rem);
     padding: 8px 13px;
     border-radius: 0.8rem;
     background-color: $offWhiteColor;
-    color: $secondaryHeadingFontColor;
-    font-size: 0.8rem;
-    font-family: $bodyFont;
     border: 1px solid $bgColor;
+    text-transform: uppercase;
 }

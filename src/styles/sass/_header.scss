@@ -10,7 +10,7 @@ header h2 {
 }
 
 h1 {
-    @include fontStyle($bodyFont, $offWhiteColor, 3.5rem, 600);
+    @include fontStyle($bodyFont, $offWhiteColor, 3.7rem, 600);
     text-transform: uppercase;
     text-shadow:
     -0.02rem -0.02rem 0.07rem $headingFontColor,
