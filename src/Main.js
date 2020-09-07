@@ -47,7 +47,7 @@ class Main extends Component {
 
     // API Call to OMDb to get the movie results
     fetchSearchResults = (query) => {
-        const searchUrl = `http://www.omdbapi.com/?apikey=eb2d65bb&type=movie&s=${query}`
+        const searchUrl = `https://www.omdbapi.com/?apikey=eb2d65bb&type=movie&s=${query}`
 
         // Because this is a live search, need to cancel previous API requests before making a new one (otherwise requests will be firing each time user types a letter)
         // Before making request, first check if this.cancel token is already available; if so, then cancel that previous request before making new one
