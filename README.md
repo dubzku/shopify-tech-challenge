@@ -13,6 +13,8 @@ A simple movie nominations app, where users can search for/nominate their favour
 - Banner notification when the user has reach the 5 nomination maximum.
 - Loading animation in the search results container. 
 - User's nomination choices saved when user leaves the page.  
+- Error handling to prevent users from nominating more than 5 movies.
+- Banner notification to let user know if their exact search does not match any titles. 
 
 ## Features
 
@@ -23,4 +25,3 @@ A simple movie nominations app, where users can search for/nominate their favour
 - Modern ES6
 - Accessible elements and UI 
 - Responsive design across all modern platforms and browsers
-- Error handling to prevent users from nominating more than 5 movies 
