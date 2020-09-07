@@ -10,7 +10,7 @@ class App extends Component {
     render() {
         AOS.init();
         return (
-            <div className="App wrapper">
+            <div className="wrapper">
                 <Header />
                 <Main />
                 <Footer />

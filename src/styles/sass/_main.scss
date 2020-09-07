@@ -80,7 +80,7 @@ input[type="text"] {
 }
 
 input[type="text"]:focus{
-    background-color: lighten($headingFontColor, 25);
+    background-color: lighten($headingFontColor, 30);
 }
 
 .magnifyingGlass {
@@ -94,8 +94,12 @@ input[type="text"]:focus{
 
 // Nominations
 
-.resultsContainer h2,
-.nominationsContainer h2,
+h3 {
+    @include fontStyle ($bodyFont, $bgColor, 1.6rem);
+}
+
+.resultsContainer h3,
+.nominationsContainer h3,
 .nominationChoice,
 .resultOption {
     text-align: center;

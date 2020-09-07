@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import firebase from './firebase';
+import Instructions from './Instructions';
 import Nominations from './Nominations';
 import Loader from './assets/loader.gif'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -60,11 +61,10 @@ class Main extends Component {
         axios.get(searchUrl, {
             cancelToken: this.cancel.token
         })
-        .then((res) => {
+        .then( (res) => {
             const resultNotFoundMsg = ! res.data.Search.length
                                     ? 'There are no results for this title. Please try another movie title.' 
                                     : '';
-            
             this.setState ({
                 results: res.data.Search,
                 message: resultNotFoundMsg,
@@ -83,14 +83,13 @@ class Main extends Component {
 
     // Event Handler for when nominate button is clicked 
     onNominate = (resultFromApi, indexOfResult) => {
-
         if (this.state.nominatedMoviesFromChild.length < 5) {
             this.setState({
                 // add the clicked nominate button ID to a copy of the isButtonDisabled array in state, and setState for isButtonDisabled
                 isButtonDisabled: [...this.state.isButtonDisabled, resultFromApi.imdbID]
             }, () => this.checkNominationLimit(indexOfResult) )
         } else {
-            swal("You've reached your nomination limit", "You can remove a nomination to make room for another one!", "warning", {button: "Got it"})
+            swal("You've reached your nomination limit", "You can remove a nomination to make room for another one!", "warning", { button: "Got it" })
         }
     }
 
@@ -107,12 +106,14 @@ class Main extends Component {
         } 
     }
 
+    // Callback function to get updated isButtonDisabled info from child (Nominations.js), so we know which buttons should be disabled/not 
     callbackToSendNomination = (dataFromChild) => {
         this.setState({
             isButtonDisabled: dataFromChild
         })
     }
 
+    // Callback function to get nominated movies data from child (Nominations.js)
     callbackToSendNominationTwo = (dataFromChild) => {
         this.setState({
             nominatedMoviesFromChild: dataFromChild
@@ -123,18 +124,12 @@ class Main extends Component {
         const { query, loading, message, isButtonDisabled, results } = this.state;
 
         return (
-            <main className="App">
+            <main>
 
-                <div className="instructions">
-                    <p>It's that time of year again...cast your votes for the 2020 Shoppies Movie Awards! You can nominate up to 5 movies. Happy nominating!</p>
-                </div>
-                <div className="limitReached">
-                    { this.state.nominatedMoviesFromChild.length >= 5 
-                    ? <p>You've reached your nomination limit!</p> 
-                    : '' }
-                </div>
+                <Instructions 
+                    nominatedMoviesLength={ this.state.nominatedMoviesFromChild.length } 
+                />
                 
-                {/* Search Input */}
                 <div className="searchBar">
                     <label htmlFor="searchInput" className="srOnly">Enter movie name</label>   
                     <input 
@@ -146,21 +141,19 @@ class Main extends Component {
                         maxLength="37"
                         onChange={ this.handleOnInputChange }
                     />
-                    <span className="srOnly">Search icon from Font Awesome</span><FontAwesomeIcon icon={faSearch} className="magnifyingGlass" />
+                    <span className="srOnly">Search icon from Font Awesome</span>
+                    <FontAwesomeIcon icon={ faSearch } className="magnifyingGlass" />
                 </div>
-                
-                
-
+            
                 <div className="errorMessage">
-                    {message && <p>{ message }</p>}
+                    { message && <p>{ message }</p> }
                 </div>
-                
                 
                 <div className="flexContainer">
-                    <div className="resultsContainer" data-aos="fade-right" data-aos-duration="700">
-                        <h2>Results {query ? `for "${query}"` :''}</h2>
+                    <div className="resultsContainer">
+                        <h3>Search Results { query ? `for "${query}"` :'' }</h3>
 
-                        <img src={Loader} className={`search-loading ${loading ? 'show' : 'hide'}`} alt="loader"/>
+                        <img src={ Loader } className={ `search-loading ${loading ? 'show' : 'hide'}` } alt="loader"/>
 
                         {
                             results.map( (result, index) => {

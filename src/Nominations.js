@@ -12,7 +12,7 @@ class Nominations extends Component {
     componentDidMount() {
         const dbRef = firebase.database().ref();
 
-        // grabbing data from Firebase 
+        // grabbing sotred data from Firebase 
         dbRef.on('value', (snapshot) => {
             const data = snapshot.val();
 
@@ -53,7 +53,7 @@ class Nominations extends Component {
 
         const index = copyIsButtonDisabled.indexOf(filteredResultId);
 
-        // Check if the id of the disabled button is in the isButtonDisabled array; if yes, remove it from the array so that the button becomes re-enabled 
+        // Check if the ID of the disabled button is in the isButtonDisabled array; if yes, remove it from the array so that the button becomes re-enabled 
         if (index > -1 ) {
             copyIsButtonDisabled.splice(index, 1)
         }
@@ -65,18 +65,22 @@ class Nominations extends Component {
     render () {
         const { nominatedMovies } = this.state;
         return (
-            <div className="nominationsContainer" data-aos="fade-right" data-aos-duration="700">
-                    <h2>Movie Nominations</h2>
-                    {
-                        nominatedMovies.map((nominatedMovie) => {
-                            return (
-                                <div key={nominatedMovie.imdbID} className="nominationChoice">
-                                    <p>{nominatedMovie.movieName} ({nominatedMovie.movieYear})</p>
-                                    <button className="removeButton" onClick={ () => this.removeNomination(nominatedMovie.key) }>Remove</button>
-                                </div>
-                            )
-                        }) 
-                    }
+            <div className="nominationsContainer">
+                <h3>Movie Nominations</h3>
+                {
+                    nominatedMovies.map((nominatedMovie) => {
+                        return (
+                            <div key={nominatedMovie.imdbID} className="nominationChoice">
+                                <p>{nominatedMovie.movieName} ({nominatedMovie.movieYear})</p>
+                                <button 
+                                    className="removeButton"
+                                    onClick={ () => this.removeNomination(nominatedMovie.key) }>
+                                    Remove
+                                </button>
+                            </div>
+                        )
+                    }) 
+                }
             </div>
         )
     }
