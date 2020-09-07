@@ -58,9 +58,6 @@ class Main extends Component {
         // if it is not available, create a new token
         this.cancel = axios.CancelToken.source();
 
-        // axios.get(searchUrl, {
-        //     cancelToken: this.cancel.token
-        // })
         axios({
             url: searchUrl,
             method: `GET`,
