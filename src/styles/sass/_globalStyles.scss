@@ -13,3 +13,23 @@ body {
     color: $bgColor;
     background-color: $bgColor;
 }
+
+.removeButton,
+.nominateButton {
+    @include buttonStyle();
+}
+
+.removeButton:disabled,
+.nominateButton:disabled {
+    background: lighten($bgColor, 50);
+    color: $bgColor;
+}
+
+.removeButton:hover,
+.nominateButton:hover,
+.removeButton:focus,
+.nominateButton:focus {
+    background: $secondaryHeadingFontColor;
+    color: $offWhiteColor;
+    transition: all 0.4s;
+}

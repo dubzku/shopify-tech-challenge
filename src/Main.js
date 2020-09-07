@@ -3,6 +3,8 @@ import axios from 'axios';
 import firebase from './firebase';
 import Nominations from './Nominations';
 import Loader from './assets/loader.gif'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 class Main extends Component {
     constructor (props) {
@@ -43,7 +45,7 @@ class Main extends Component {
 
     // API Call to OMDb to get the movie results
     fetchSearchResults = (query) => {
-        const searchUrl = `http://www.omdbapi.com/?apikey=2e09b2c3&type=movie&s=${query}`
+        const searchUrl = `http://www.omdbapi.com/?apikey=eb2d65bb&type=movie&s=${query}`
 
         // Because this is a live search, need to cancel previous API requests before making a new one (otherwise requests will be firing each time user types a letter)
         // Before making request, first check if this.cancel token is already available; if so, then cancel that previous request before making new one
@@ -72,7 +74,7 @@ class Main extends Component {
             if (axios.isCancel(error) || error ) {
                 this.setState({
                     loading: false,
-                    message: "Hmm, we don't have that exact title. Here are some similar titles."
+                    message: "Hmm, we don't have that exact title. Please try another title."
                 })
             }
         })
@@ -122,9 +124,12 @@ class Main extends Component {
         return (
             <div className="App">
 
-                {/* Banner to let user know they've reached nomination limit */}
-                { this.state.nominatedMoviesFromChild.length >= 5 ? <p>You've reached your limit of 5 nominations!</p> : '' }
+                <div className="instructions">
+                    <p>It's that time of year again...cast your picks for the 2020 Shoppies Movie Awards! You can nominate up to 5 movies. Happy nominating!</p>
 
+                    { this.state.nominatedMoviesFromChild.length >= 5 ? <p className="limitReached">You've reached your limit of 5 nominations!</p> : '' }
+                </div>
+                
                 {/* Search Input */}
                 <label htmlFor="searchInput">
                     <input 
@@ -135,14 +140,17 @@ class Main extends Component {
                         placeholder="Enter movie name"
                         onChange={ this.handleOnInputChange }
                     />
-                    <i className="fas fa-search"/>
+                    <span className="srOnly">Search icon from Font Awesome</span><FontAwesomeIcon icon={faSearch} className="magnifyingGlass" />
                 </label>
 
-                {message && <p className="message">{ message }</p>}
+                <div className="message">
+                    {message && <p>{ message }</p>}
+                </div>
+                
                 
                 <div className="flexContainer">
                     <div className="resultsContainer">
-                        <h2>Movie Results for {this.state.query}</h2>
+                        <h2>Results {query ? `for "${query}"` :''}</h2>
 
                         <img src={Loader} className={`search-loading ${loading ? 'show' : 'hide'}`} alt="loader"/>
 

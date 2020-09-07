@@ -1,12 +1,42 @@
+.instructions {
+    @include fontStyle($bodyFont, $offWhiteColor, 1.1rem, 400, 2rem);
+    height: 70px;
+    text-align: center;
+}
+
+.limitReached,
+.message {
+    color: $headingFontColor;
+    text-align: center;
+}
+
+.limitReached {
+    padding: 0px 0px 15px 0px;
+}
+
+.message {
+    height: 50px;
+}
+
 .flexContainer {
     display: flex;
+    justify-content: space-between;
 }
 
 .resultsContainer,
 .nominationsContainer {
-    border: 1px solid black;
-    width: 50%;
-    background: white;
+    border: 1px solid $bgColor;
+    width: calc(50% - 20px);
+    background: $offWhiteColor;
+    min-height: 270px;
+}
+
+.resultsContainer {
+    margin-right: 20px;
+}
+
+.nominationsContainer {
+    margin-left: 20px;
 }
 
 .resultsContainer {
@@ -16,6 +46,7 @@ position: relative;
 /* Loader */
 .search-loading {
 position: absolute;
+top: 150px;
 left: 0;
 right: 0;
 margin: auto;
@@ -31,9 +62,24 @@ display: none;
 }
 
 // Form
+label {
+    position: relative;
+}
+
 input[type="text"] {
-    @include fontStyle($bodyFont, $bgColor, 1rem);
-    padding: 10px;
+    @include fontStyle($bodyFont, $bgColor, 1.1rem);
+    padding: 10px 10px 10px 60px;
+    width: 100%;
+    margin: 20px 0 30px 0;
+}
+
+.magnifyingGlass {
+    position: absolute;
+    left: 18px;
+    top: 5px;
+    color: lighten($bgColor, 40);
+    font-size: 1.2rem;
+
 }
 
 // Nominations
@@ -44,21 +90,6 @@ input[type="text"] {
 .resultOption {
     text-align: center;
     filter: drop-shadow(0px 0px 5px #666);
-    background: white;
+    background: $offWhiteColor;
     padding: 15px 0;
-    // p {
-    //     // display: inline-block;
-    //     padding: 20px;
-    // }
-}
-
-.removeButton,
-.nominateButton {
-    @include buttonStyle();
-}
-
-.removeButton:disabled,
-.nominateButton:disabled {
-    background: lighten($bgColor, 50);
-    color: $bgColor;
 }

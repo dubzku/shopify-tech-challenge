@@ -1,11 +1,10 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 
 const Footer = () => {
     return (
-        <Fragment>
-            <p>Created by Winnie Ku</p>
-            <p>Built using the OMDb API</p>
-        </Fragment>
+        <footer>
+            <p>Created by <a href="https://heyitswinnie.io/" target="_blank">Winnie Ku</a> || Movie data from the <a href="http://www.omdbapi.com/" target="_blank">OMDb API</a> </p>
+        </footer>
     );
 }
 
