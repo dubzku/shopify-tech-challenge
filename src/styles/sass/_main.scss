@@ -1,9 +1,3 @@
-.instructions,
-.errorMessage,
-.limitReached {
-    text-align: center;
-}
-
 .instructions {
     @include fontStyle($bodyFont, $offWhiteColor, 1.1rem);
 }
@@ -23,6 +17,36 @@
     height: 30px;
 }
 
+/* Search Field */
+
+.searchBar {
+    position: relative;
+}
+
+input[type="text"] {
+    @include fontStyle($bodyFont, $bgColor, 1.1rem);
+    padding: 10px 10px 10px 60px;
+    width: 100%;
+    margin: 10px 0;
+    &:focus {
+        background-color: lighten($headingFontColor, 30);
+    }
+}
+
+.magnifyingGlass {
+    position: absolute;
+    left: 18px;
+    top: 28px;
+    color: lighten($bgColor, 25);
+    font-size: 1.2rem;
+}
+
+/* Results and Nominations Containers */
+
+h3 {
+    @include fontStyle ($bodyFont, $bgColor, 1.6rem);
+}
+
 .flexContainer {
     display: flex;
     justify-content: space-between;
@@ -39,71 +63,36 @@
 
 .resultsContainer {
     margin-right: 35px;
+    position: relative;
 }
 
 .nominationsContainer {
     margin-left: 35px;
 }
 
-.resultsContainer {
-position: relative;
-}
-
-/* Loader */
-.search-loading {
-    position: absolute;
-    top: 150px;
-    left: 0;
-    right: 0;
-    margin: auto;
-}
-
-/* Show and Hide */
-.show {
-display: inline-block;
-}
-
-.hide {
-display: none;
-}
-
-// Form
-.searchBar {
-    position: relative;
-}
-
-input[type="text"] {
-    @include fontStyle($bodyFont, $bgColor, 1.1rem);
-    padding: 10px 10px 10px 60px;
-    width: 100%;
-    margin: 10px 0 10px 0;
-}
-
-input[type="text"]:focus{
-    background-color: lighten($headingFontColor, 30);
-}
-
-.magnifyingGlass {
-    position: absolute;
-    left: 18px;
-    top: 28px;
-    color: lighten($bgColor, 25);
-    font-size: 1.2rem;
-
-}
-
-// Nominations
-
-h3 {
-    @include fontStyle ($bodyFont, $bgColor, 1.6rem);
-}
-
 .resultsContainer h3,
 .nominationsContainer h3,
 .nominationChoice,
 .resultOption {
-    text-align: center;
     filter: drop-shadow(0px 0px 5px #666);
     background: $offWhiteColor;
-    padding: 15px 0;
+    padding: 15px;
+}
+
+/* Loader gif within results container */
+
+.show {
+    display: inline-block;
+}
+
+.hide {
+    display: none;
+}
+
+.search-loading {
+    position: absolute;
+    top: 130px;
+    left: 0;
+    right: 0;
+    margin: auto;
 }

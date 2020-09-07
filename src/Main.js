@@ -138,7 +138,7 @@ class Main extends Component {
                         name="query"
                         value={ query }
                         placeholder="Enter movie name"
-                        maxLength="37"
+                        maxLength="30"
                         onChange={ this.handleOnInputChange }
                     />
                     <span className="srOnly">Search icon from Font Awesome</span>

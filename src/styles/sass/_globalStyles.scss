@@ -14,8 +14,13 @@ body {
     background-color: $bgColor;
 }
 
-.removeButton,
-.nominateButton {
+body, .swal-text {
+    text-align: center;
+}
+
+/* Button Styling */
+.nominateButton,
+.removeButton {
     @include buttonStyle();
 }
 
@@ -26,15 +31,16 @@ body {
     cursor: default;
 }
 
-.removeButton:hover,
 .nominateButton:hover,
-.removeButton:focus,
-.nominateButton:focus {
+.removeButton:hover,
+.nominateButton:focus
+.removeButton:focus {
     background: $secondaryHeadingFontColor;
     color: $offWhiteColor;
     transition: all 0.4s;
 }
 
+/* Sweet Alert Modal Styling */
 .swal-text {
     font-family: $modalFont;
     color: $bgColor;
